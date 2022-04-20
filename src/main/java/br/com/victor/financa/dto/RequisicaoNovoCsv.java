@@ -7,12 +7,14 @@ import javax.validation.constraints.NotBlank;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class RequisicaoNovoCsv {
@@ -103,8 +105,10 @@ public class RequisicaoNovoCsv {
             LocalDate dataCorreta = null;
 
             boolean informacaoCompleta = true;
+            boolean dataJaInclusa = false;
             while ((arquivo = reader.readNext()) != null) {
                 informacaoCompleta = true;
+                dataJaInclusa = false;
                 Transacao transacao = new Transacao();
                 transacao.setBancoOrigem(arquivo[0]);
                 transacao.setAgenciaOrigem(arquivo[1]);
@@ -117,18 +121,24 @@ public class RequisicaoNovoCsv {
                 transacao.setDataDaTransacao(original.toLocalDate());
                 transacao.setDataDeImportacao(LocalDateTime.now());
                 LocalDate dataTrasacao = transacao.getDataDaTransacao();
+                for (LocalDate dataNaoRepetida: dataRepetida) {
+                    if (dataNaoRepetida.equals(dataTrasacao)){
+                        System.out.println("data repetida");
+                        dataJaInclusa = true;
+                    }
+                }
                 for (int i = 0; i < 7; i++) {
                     if (arquivo[i].isBlank()) {
                         informacaoCompleta = false;
                     }
                 }
-                if (informacaoCompleta == true) {
+                if (informacaoCompleta == true && dataJaInclusa == false) {
                     if (dataCorreta == null || dataCorreta.equals(dataTrasacao)) {
                         System.out.println("Data nula ou correta");
                         dataCorreta = dataTrasacao;
                         transacoes.add(transacao);
                     } else {
-                        System.out.println("data Incorreta");
+                        System.out.println("data Incorreta ou data repetida");
                     }
                 }
             }
@@ -139,7 +149,7 @@ public class RequisicaoNovoCsv {
             }
             dataCorreta = null;
         } catch (ArrayIndexOutOfBoundsException e){
-            System.out.println("campo em branco");
+            System.out.println("Arquivo está vazio");
         }
 
         reader.close();

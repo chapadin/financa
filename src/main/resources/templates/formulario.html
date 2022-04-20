@@ -17,7 +17,9 @@
         <div class="col">
         <button class="btn btn-primary" type="submit" id="inputGroupFileAddon04">Enviar</button>
         </div>
+        <div th:text="${erroNoUpload}" class="alert alert-danger d-flex align-items-center" role="alert" th:if="${erroNoUpload}" style="width: fit-content; margin: 0 auto" > Erro no Upload </div>
     </form>
+
     <hr>
     <div>
         <h2>IMPORTAÇÕES REALIZADAS</h2>
@@ -32,7 +34,7 @@
             </thead>
             <tbody  th:each="dataContulta : ${dataContultas}" >
             <tr>
-               <td><span th:text="${#temporals.format(dataContulta.dataDaTransacao, 'dd/MM/yyyy')}">> DATA TRANSAÇÕES </span></td>
+               <td><span th:text="${#temporals.format(dataContulta.dataDaTransacao, 'dd/MM/yyyy')}"> DATA TRANSAÇÕES </span></td>
                <td><span th:text="${#temporals.format(dataContulta.dataDeImportacao, 'dd-MM-yyyy HH:mm:ss')}"> DATA IMPORTAÇÃO </span></td>
             </tr>
             </tbody>

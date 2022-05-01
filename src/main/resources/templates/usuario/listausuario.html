@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <title>Usuarios Cadastrados</title>
+</head>
+
+<body>
+    <div th:replace="~{base :: menu}"></div>
+    <div class="container">
+        <h1 style="text-align: center;">USUÁRIOS CADASTRADOS</h1>
+        <a href="/usuario/cadastro"><button class="btn btn-primary mb-2" type="submit">Novo</button></a>
+        <div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">NOME</th>
+                        <th scope="col">EMAIL</th>
+                        <th scope="col">OPÇÕES</th>
+                    </tr>
+                </thead>
+                <tbody th:each="usuario : ${usuarios}">
+                    <tr>
+                        <td><span th:text="${usuario.id}" th:value="id">ID</span></td>
+                        <td><span th:text="${usuario.nome}">NOME</span></td>
+                        <td><span th:text="${usuario.email}">EMAIL</span></td>
+                        <td><div class="btn-group">
+                                <form method="POST" th:object="${usuario}"
+                                    th:action="@{/usuario/editar/{id}(id=${usuario.id})}">
+                                    <button th:action="@{/editar/{id}(id=${usuario.id})}" type="submit"
+                                        class="btn btn-info me-1">Editar</button>
+                                </form>
+                                <form method="POST" th:object="${usuario}"
+                                    th:action="@{/usuario/delete/{id}(id=${usuario.id})}">
+                                    <button type="submit" class="btn btn-danger"
+                                        onClick="confirm('Confirma?')">Remover</button>
+                                </form>
+                            </div>       
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>

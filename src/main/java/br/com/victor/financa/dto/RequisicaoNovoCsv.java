@@ -1,22 +1,30 @@
 package br.com.victor.financa.dto;
 
 import br.com.victor.financa.model.Transacao;
+import br.com.victor.financa.model.Users;
+import br.com.victor.financa.repository.UsuarioRepository;
+import lombok.RequiredArgsConstructor;
+
 import com.opencsv.CSVReader;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotBlank;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+@RequiredArgsConstructor
 public class RequisicaoNovoCsv {
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -96,8 +104,8 @@ public class RequisicaoNovoCsv {
 
 
 
-    public ArrayList<Transacao>  novoCsv(File nomeArquivo, String uploads, List<LocalDate> dataRepetida) throws IOException {
-
+    @PostConstruct
+    public ArrayList<Transacao>  novoCsv(File nomeArquivo, String uploads, List<LocalDate> dataRepetida, String email, Users user) throws IOException {
         CSVReader reader = new CSVReader(new FileReader(uploads + nomeArquivo));
         ArrayList<Transacao> transacoes = new ArrayList<Transacao>();
         try {
@@ -110,6 +118,7 @@ public class RequisicaoNovoCsv {
                 informacaoCompleta = true;
                 dataJaInclusa = false;
                 Transacao transacao = new Transacao();
+
                 transacao.setBancoOrigem(arquivo[0]);
                 transacao.setAgenciaOrigem(arquivo[1]);
                 transacao.setContaOrigem(arquivo[2]);
@@ -121,6 +130,7 @@ public class RequisicaoNovoCsv {
                 transacao.setDataDaTransacao(original.toLocalDate());
                 transacao.setDataDeImportacao(LocalDateTime.now());
                 LocalDate dataTrasacao = transacao.getDataDaTransacao();
+                transacao.setUser(user);
                 for (LocalDate dataNaoRepetida: dataRepetida) {
                     if (dataNaoRepetida.equals(dataTrasacao)){
                         System.out.println("data repetida");

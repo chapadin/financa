@@ -4,11 +4,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+import org.hibernate.annotations.ManyToAny;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-public class Transacao {
+public class Transacao implements Comparable<Transacao> {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,6 +25,8 @@ public class Transacao {
     private String valorDaTransacao;
     private LocalDate dataDaTransacao;
     private LocalDateTime dataDeImportacao;
+    @ManyToOne
+    private Users user;
 
     public Transacao() {
     }
@@ -118,7 +124,32 @@ public class Transacao {
                 ", agenciaDestino=" + agenciaDestino +
                 ", contaDestino='" + contaDestino + '\'' +
                 ", valorDaTransacao='" + valorDaTransacao + '\'' +
-                ", dataDaTransacao=" + dataDaTransacao +
+                ", dataDaTransacao=" + dataDaTransacao + '\'' +
+                ", IdUser=" + user.getNome() +
                 '}';
     }
+
+    @Override
+    public int compareTo(Transacao transacao) {
+        return this.getDataDaTransacao().compareTo(transacao.dataDaTransacao);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Users getUser() {
+        return user;
+    }
+
+    public void setUser(Users user) {
+        this.user = user;
+    }
+
+
+    
 }

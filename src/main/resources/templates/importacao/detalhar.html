@@ -12,18 +12,21 @@
 <body>
     <div th:replace="~{base :: menu}"></div>
     <div class="container">
-        <h1 style="text-align: center;">USUÁRIOS CADASTRADOS</h1>
+        <h1 style="text-align: center;">DETALHES DA IMPORTAÇÃO</h1>
         <div>
-            <form>
+            <form th:each="detalhe : ${detalhes}">
                 <fieldset disabled="disabled">
                     <div class="col">
                     <label for="ImportadoEm" class="form-label">Importado em</label>
-                    <input type="text" id="ImportadoEm" class="form-control" value="30/04/2022 - 10:54">
+                    <input type="text" th:value="${#temporals.format(detalhe.dataDeImportacao, 'dd-MM-yyyy HH:mm:ss')}" id="ImportadoEm" class="form-control" >
+                    <!-- <input type="text" id="ImportadoEm" class="form-control" > -->
                     </div>
                     <label for="ImportadoPor" class="form-label">Importado por</label>
-                    <input type="text" id="ImportadoPor" class="form-control"  value="Victor Almeida">
+                    <input type="text" th:value="${detalhe.user.nome}" id="ImportadoPor" class="form-control">
+                    <!-- <input type="text"  id="ImportadoPor" class="form-control"> -->
                     <label for="DataTrasacao" class="form-label">Data transações</label>
-                    <input type="text" id="DataTrasacao" class="form-control"  value="15/01/2019">
+                    <input type="text" th:value="${#temporals.format(detalhe.dataDaTransacao, 'dd/MM/yyyy')}" id="DataTrasacao" class="form-control">
+                    <!-- <input type="text" id="DataTrasacao" class="form-control"> -->
             </fieldset>
             </form>
         </div>

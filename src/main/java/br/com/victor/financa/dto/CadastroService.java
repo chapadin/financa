@@ -1,10 +1,11 @@
 package br.com.victor.financa.dto;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import br.com.victor.financa.model.Authority;
 import br.com.victor.financa.model.Users;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class CadastroService {
 
@@ -13,6 +14,8 @@ public class CadastroService {
     private String senha;
     private Boolean enabled;
 
+
+    private EmailService emailService;
 
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -39,6 +42,7 @@ public class CadastroService {
     public void setSenha(String senha) {
         this.senha = senha;
     }
+
     public Users novo() {
         Users usuario = new Users();
         Authority authority = new Authority("USER");

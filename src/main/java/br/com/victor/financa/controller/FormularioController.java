@@ -26,6 +26,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
@@ -42,7 +43,6 @@ public class FormularioController {
     public String formulario(Model model) {
 
         List<LocalDate> dataTransacao = transacaoRepository.findByDatadeTransacao();
-        System.out.println(dataTransacao);
         model.addAttribute("dataTransacao", dataTransacao);
         List<Transacao> dataConsulta = transacaoRepository.findAll();
         List<Transacao> dataCorreta = new ArrayList<>();
@@ -88,12 +88,20 @@ public class FormularioController {
         return ("redirect:/formulario");
     }
 
-    @PostMapping("/importacao/detalhar/{data}")
-    public String detalhar(@PathVariable String data, Model model) {
+    @PostMapping("/importacao/detalhar")
+    public String detalhar(@RequestParam("data") String data, Model model) {
         LocalDate data2 = LocalDate.parse(data);
-        System.out.println(data2);
         List<Transacao> transacao = transacaoRepository.findBydataDaTransacao(data2);
         model.addAttribute("importacoes", transacao );
+        ArrayList<Transacao> detalhes = new ArrayList<>(); 
+        for (Transacao transacao2 : transacao) {
+            if (transacao2.getId() != null) {
+                detalhes.add(transacao2);
+                model.addAttribute("detalhes", detalhes);
+                break;
+            }
+        }
+        
         return "/importacao/detalhar";
     }
 }

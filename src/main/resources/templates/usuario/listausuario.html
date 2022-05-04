@@ -36,12 +36,12 @@
                                         class="btn btn-info me-1">Editar</button>
                                 </form>
                                 <form method="POST" th:object="${usuario}"
-                                    th:action="@{/usuario/delete/{id}(id=${usuario.id})}">
-                                    <button type="submit" class="btn btn-danger"
+                                    th:action="@{/usuario/delete}">
+                                    <button th:value="${usuario.id}" th:name="id" type="submit" class="btn btn-danger"
                                         onClick="confirm('Confirma?')">Remover</button>
                                 </form>
                             </div>       
-                        </td>
+                        </td>   
                     </tr>
                 </tbody>
             </table>

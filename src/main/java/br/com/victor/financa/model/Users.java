@@ -17,7 +17,8 @@ import javax.persistence.OneToMany;
 @Entity
 public class Users implements Serializable {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
     @Column(name = "username", unique = true)
@@ -26,7 +27,7 @@ public class Users implements Serializable {
     private Boolean enabled;
     @OneToMany(mappedBy = "id")
     private Set<Transacao> transacoes;
-     
+
     @ElementCollection
     @CollectionTable(name = "authorities", joinColumns = @JoinColumn(name = "username", referencedColumnName = "username"))
     private final Set<Authority> authorities = new HashSet<>();
@@ -38,7 +39,6 @@ public class Users implements Serializable {
     public Set<Authority> getAuthorities() {
         return authorities;
     }
-        
 
     public Long getId() {
         return id;
@@ -60,17 +60,8 @@ public class Users implements Serializable {
         return email;
     }
 
-
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getSenha() {
-        return password;
-    }
-
-    public void setSenha(String password) {
-        this.password = password;
     }
 
     public Boolean getEnabled() {
@@ -96,7 +87,5 @@ public class Users implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    
 
 }

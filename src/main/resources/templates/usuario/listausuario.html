@@ -13,6 +13,7 @@
     <div th:replace="~{base :: menu}"></div>
     <div class="container">
         <h1 style="text-align: center;">USUÁRIOS CADASTRADOS</h1>
+        <div th:text="${erroDeExclusao}" class="alert alert-danger d-flex align-items-center" role="alert" th:if="${erroDeExclusao}" style="width: fit-content; margin: 0 auto" > Usuario logado, não pode excluir </div>
         <a href="/usuario/cadastro"><button class="btn btn-primary mb-2" type="submit">Novo</button></a>
         <div>
             <table class="table table-bordered">
@@ -31,13 +32,13 @@
                         <td><span th:text="${usuario.email}">EMAIL</span></td>
                         <td><div class="btn-group">
                                 <form method="POST" th:object="${usuario}"
-                                    th:action="@{/usuario/editar/{id}(id=${usuario.id})}">
-                                    <button th:action="@{/editar/{id}(id=${usuario.id})}" type="submit"
-                                        class="btn btn-info me-1">Editar</button>
+                                    th:action="@{/usuario/editar}">
+                                    <a href="/usuario/editar"><button th:value="${usuario.email}" th:name="email" type="submit"
+                                        class="btn btn-info me-1">Editar</button></a>
                                 </form>
                                 <form method="POST" th:object="${usuario}"
                                     th:action="@{/usuario/delete}">
-                                    <button th:value="${usuario.id}" th:name="id" type="submit" class="btn btn-danger"
+                                    <button th:value="${usuario.email}" th:name="email" type="submit" class="btn btn-danger"
                                         onClick="confirm('Confirma?')">Remover</button>
                                 </form>
                             </div>       

@@ -1,7 +1,7 @@
 package br.com.victor.financa.dto;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
+import java.util.Random;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import br.com.victor.financa.model.Authority;
@@ -13,7 +13,6 @@ public class CadastroService {
     private String email;
     private String senha;
     private Boolean enabled;
-
 
     private EmailService emailService;
 
@@ -49,7 +48,12 @@ public class CadastroService {
         usuario.setNome(nome);
         usuario.setEmail(email);
         usuario.setEnabled(true);
-        usuario.setSenha(encoder.encode(senha));
+        Random rnd = new Random();
+        int numero = rnd.nextInt(999999);
+        String senha = String.format("%06d", numero);
+        this.senha = senha;
+        System.out.println(senha);
+        usuario.setPassword(encoder.encode(senha));
         usuario.addAuthority(authority);
         return usuario;
     }

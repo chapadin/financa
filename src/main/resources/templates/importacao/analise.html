@@ -1,0 +1,134 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+
+    <title>Analise de transações</title>
+  </head>
+
+  <body>
+    <div th:replace="~{base :: menu}"></div>
+    <div class="container">
+      <h1 style="text-align: center">ANÁLISE DE TRANSAÇÕES SUSPEITA</h1>
+      <div class="mb-3">
+        <form method="post" th:action="@{/importacao/analisado}">
+        <label class="form-label"
+          >Selecione o mês para analisar as transações</label>
+        <input
+          type="Date"
+          class="form-control"
+          id="data"
+          th:name="data"
+          aria-describedby="data"
+        />
+
+      <button type="submit" class="btn btn-primary">Realizar análise</button>
+      </form>
+      </div>
+      <div>
+        <h2 style="text-align: center" class="mt-2">TRANSAÇÕES IMPORTADAS</h2>
+      </div>
+      <div class="container">
+        <table class="table table-striped table-bordered">
+          <thead>
+            <tr>
+              <th style="text-align: center" colspan="3" scope="col">ORIGEM</th>
+              <th style="text-align: center" colspan="3" scope="col">
+                DESTINO
+              </th>
+              <th
+                rowspan="2"
+                scope="col"
+                class="align-middle"
+                style="text-align: center"
+              >
+                VALOR
+              </th>
+            </tr>
+            <tr>
+              <th scope="col">BANCO</th>
+              <th scope="col">AGENCIA</th>
+              <th scope="col">CONTA</th>
+              <th scope="col">BANCO</th>
+              <th scope="col">AGENCIA</th>
+              <th scope="col">CONTA</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="transacao : ${transacao}">
+              <td><span th:text="${transacao.bancoOrigem}">banco</span></td>
+              <td><span th:text="${transacao.agenciaOrigem}">agencia</span></td>
+              <td><span th:text="${transacao.contaOrigem}">conta</span></td>
+              <td><span th:text="${transacao.bancoDestino}">banco</span></td>
+              <td>
+                <span th:text="${transacao.agenciaDestino}">agencia</span>
+              </td>
+              <td><span th:text="${transacao.contaDestino}">conta</span></td>
+              <td>
+                <span
+                  th:text="${'R$ '+#numbers.formatDecimal(transacao.valorDaTransacao,3,'POINT',2,'COMMA')}"
+                  >valor</span
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <h2 style="text-align: center">CONTAS SUSPEITAS</h2>
+      <table  class="table table-striped table-bordered">
+        <thead>
+          <th>BANCO</th>
+          <th>AGÊNCIA</th>
+          <th>CONTA</th>
+          <th>VALOR MOVIMENTADO</th>
+          <th>TIPO MOVIMENTAÇÃO</th>
+        </thead>
+        <tbody>
+          <tr th:each=" contaSusp : ${contaSusp}">
+            <td><span th:text="${contaSusp.bancoOrigem}"></span></td>
+            <td><span th:text="${contaSusp.agenciaOrigem}"></span></td>
+            <td><span th:text="${contaSusp.contaOrigem}"></span></td>
+            <td><span th:object="${somaConta}" th:text="${'R$ '+#numbers.formatDecimal(somaConta,3,'POINT',2,'COMMA')}"></span></td>
+            <td><span th:object="${saida}" th:text="${saida}"></span></td>
+          </tr>          
+          <tr th:each=" contaSusp : ${contaSusp}">
+            <td><span th:text="${contaSusp.bancoDestino}"></span></td>
+            <td><span th:text="${contaSusp.agenciaDestino}"></span></td>
+            <td><span th:text="${contaSusp.contaDestino}"></span></td>
+            <td><span th:object="${somaConta}" th:text="${'R$ '+#numbers.formatDecimal(somaConta,3,'POINT',2,'COMMA')}"></span></td>
+            <td><span th:object="${entrada}" th:text="${entrada}"></span></td>
+          </tr>
+        </tbody>
+      </table>
+      <h2 style="text-align: center">AGÊNCIAS SUSPEITAS</h2>
+      <table class="table table-striped table-bordered">
+        <thead>          
+          <th>BANCO</th>
+          <th>AGÊNCIA</th>
+          <th>VALOR MOVIMENTADO</th>
+          <th>TIPO MOVIMENTAÇÃO</th>
+        </thead>
+        <tbody>
+          <tr th:each="ageSusp : ${ageSusp}">
+            <td><span th:text="${ageSusp.bancoOrigem}"></span></td>
+            <td><span th:text="${ageSusp.agenciaOrigem}"></span></td>
+            <td><span th:object="${somaAgencia}" th:text="${'R$ '+#numbers.formatDecimal(somaAgencia,3,'POINT',2,'COMMA')}"></span></td>
+            <td><span th:object="${saidaAge}" th:text="${saidaAge}"></span></td>
+          </tr>          
+          <tr th:each="ageSusp : ${ageSusp}">
+            <td><span th:text="${ageSusp.bancoDestino}"></span></td>
+            <td><span th:text="${ageSusp.agenciaDestino}"></span></td>
+            <td><span th:object="${somaAgencia}" th:text="${'R$ '+#numbers.formatDecimal(somaAgencia,3,'POINT',2,'COMMA')}"></span></td>
+            <td><span th:object="${entradaAge}" th:text="${entradaAge}"></span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

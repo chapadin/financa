@@ -14,8 +14,6 @@ public class CadastroService {
     private String senha;
     private Boolean enabled;
 
-    private EmailService emailService;
-
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public String getNome() {

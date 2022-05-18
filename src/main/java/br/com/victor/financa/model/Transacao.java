@@ -1,20 +1,20 @@
 package br.com.victor.financa.model;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-import org.hibernate.annotations.ManyToAny;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 @Entity
 public class Transacao implements Comparable<Transacao> {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String bancoOrigem;
     private String agenciaOrigem;
@@ -22,7 +22,7 @@ public class Transacao implements Comparable<Transacao> {
     private String bancoDestino;
     private String agenciaDestino;
     private String contaDestino;
-    private String valorDaTransacao;
+    private Double valorDaTransacao;
     private LocalDate dataDaTransacao;
     private LocalDateTime dataDeImportacao;
     @ManyToOne
@@ -31,7 +31,8 @@ public class Transacao implements Comparable<Transacao> {
     public Transacao() {
     }
 
-    public Transacao(String bancoOrigem, String agenciaOrigem, String contaOrigem, String bancoDestino, String agenciaDestino, String contaDestino, String valorDaTransacao, LocalDate dataDaTransacao) {
+    public Transacao(String bancoOrigem, String agenciaOrigem, String contaOrigem, String bancoDestino,
+            String agenciaDestino, String contaDestino, Double valorDaTransacao, LocalDate dataDaTransacao, LocalDateTime dataDeImportacao, Users user) {
         this.bancoOrigem = bancoOrigem;
         this.agenciaOrigem = agenciaOrigem;
         this.contaOrigem = contaOrigem;
@@ -40,6 +41,8 @@ public class Transacao implements Comparable<Transacao> {
         this.contaDestino = contaDestino;
         this.valorDaTransacao = valorDaTransacao;
         this.dataDaTransacao = dataDaTransacao;
+        this.dataDeImportacao = dataDeImportacao;
+        this.user = user;
     }
 
     public String getBancoOrigem() {
@@ -90,11 +93,11 @@ public class Transacao implements Comparable<Transacao> {
         this.contaDestino = contaDestino;
     }
 
-    public String getValorDaTransacao() {
+    public Double getValorDaTransacao() {
         return valorDaTransacao;
     }
 
-    public void setValorDaTransacao(String valorDaTransacao) {
+    public void setValorDaTransacao(Double valorDaTransacao) {
         this.valorDaTransacao = valorDaTransacao;
     }
 
@@ -150,6 +153,4 @@ public class Transacao implements Comparable<Transacao> {
         this.user = user;
     }
 
-
-    
 }
